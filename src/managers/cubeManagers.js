@@ -27,4 +27,10 @@ exports.create = async (cubeData) => {
     await cube.save();
 
     return cube;
-}
+};
+
+exports.attachAccessory = (cubeId, accessoryId) => {
+
+    // MongoDb query
+    return Cube.findByIdAndUpdate(cubeId, {$push: {accessories: accessoryId}});
+};
