@@ -8,7 +8,11 @@ const cubeSchema = mongoose.Schema({
     accessories: [{
         type: mongoose.Types.ObjectId,
         ref: 'Accessory'
-    }]
+    }],
+    creatorId: {
+        type: String,
+        required: true
+    }
 });
 
 const Cube = mongoose.model('Cube', cubeSchema);
