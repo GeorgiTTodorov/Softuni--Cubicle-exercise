@@ -7,7 +7,6 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
     const {username, password, repeatPassword} = req.body;
-    console.log(password, repeatPassword);
 
     if (password !== repeatPassword) {
 

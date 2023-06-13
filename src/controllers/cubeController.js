@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const cubeManager = require('../managers/cubeManagers.js');
 const accessoryManager = require('../managers/accessoryManager.js');
+const {generateDifficultyOptions} = require('../util/helper.js');
 
 // Path /cubes/create
 router.get("/create", (req, res) => {
@@ -38,7 +39,7 @@ router.get('/:cubeId/details', async (req,res) => {
     const isOwner = token._id === cube.creatorId?.toString();
     const accessories = await accessoryManager.getAllOthers(cube.accessories).lean();
     const hasAccessories = accessories.length > 0;
-    console.log(accessories);
+
     
     if(!cube) {
         res.redirect('/404');
@@ -68,15 +69,18 @@ router.post('/:cubeId/attach-accessory',async (req, res) => {
 router.get('/:cubeId/delete',async (req, res) => {
     const cube = await cubeManager.getOne(req.params.cubeId).lean();
 
-    res.render('cube/delete', { cube });
+    const options = generateDifficultyOptions(cube.difficultyLevel);
+
+    res.render('cube/delete', { cube, options });
 
 });
 
 router.get('/:cubeId/edit',async (req,res) => {
     const cube = await cubeManager.getOne(req.params.cubeId).lean();
 
+    const options = generateDifficultyOptions(cube.difficultyLevel);
 
-    res.render('cube/edit', { cube });
+    res.render('cube/edit', { cube, options });
 });
 
 router.post('/:cubeId/edit', async (req, res) => {
@@ -86,6 +90,7 @@ router.post('/:cubeId/edit', async (req, res) => {
 
     res.redirect(`/${req.params.cubeId}/details`)
 });
+
 
 router.post('/:cubeId/delete', async (req, res) => {
     await cubeManager.delete(req.params.cubeId);
