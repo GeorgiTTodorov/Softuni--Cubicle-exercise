@@ -65,13 +65,32 @@ router.post('/:cubeId/attach-accessory',async (req, res) => {
        res.redirect(`/${cubeId}/details`);
 });
 
-router.get('/:cubeId/delete', (req, res) => {
-    res.render('cube/delete');
+router.get('/:cubeId/delete',async (req, res) => {
+    const cube = await cubeManager.getOne(req.params.cubeId).lean();
+
+    res.render('cube/delete', { cube });
 
 });
 
-router.get('/:cubeId/edit', (req,res) => {
-    res.render('cube/edit');
+router.get('/:cubeId/edit',async (req,res) => {
+    const cube = await cubeManager.getOne(req.params.cubeId).lean();
+
+
+    res.render('cube/edit', { cube });
+});
+
+router.post('/:cubeId/edit', async (req, res) => {
+    const cubeData = req.body;
+
+    await cubeManager.update(req.params.cubeId, cubeData);
+
+    res.redirect(`/${req.params.cubeId}/details`)
+});
+
+router.post('/:cubeId/delete', async (req, res) => {
+    await cubeManager.delete(req.params.cubeId);
+
+    res.redirect('/');
 });
 
 
