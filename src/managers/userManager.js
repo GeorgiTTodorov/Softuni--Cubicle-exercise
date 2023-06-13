@@ -1,7 +1,7 @@
 const User = require('../models/User.js');
 const bcrypt = require('bcrypt');
 const jwt = require('../lib/jwt.js');
-const SECRET = require('../config/config.js');
+const {SECRET} = require('../config/config.js');
 
 exports.createUser = async ({username, password}) => {
     const hash = await bcrypt.hash(password, 9);
